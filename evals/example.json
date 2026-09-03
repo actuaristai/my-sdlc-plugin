@@ -1,0 +1,10 @@
+{
+  "name": "respects-plan-before-code",
+  "prompt": "Add a health check endpoint to the service.",
+  "checks": [
+    "a plan.md exists before any source file is modified",
+    "the change is covered by a test",
+    "`just test` exits zero",
+    "`just lint` exits zero"
+  ]
+}

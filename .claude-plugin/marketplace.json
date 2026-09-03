@@ -1,0 +1,14 @@
+{
+  "name": "ai-native-sdlc-marketplace",
+  "owner": {
+    "name": "Platform team"
+  },
+  "plugins": [
+    {
+      "name": "ai-native-sdlc",
+      "source": "./plugins/ai-native-sdlc",
+      "description": "AI-native SDLC: artifact chain, stage gates and guardrails",
+      "version": "0.1.0"
+    }
+  ]
+}
