@@ -1,7 +1,7 @@
 {
   "name": "ai-native-sdlc",
   "description": "AI-native SDLC: the artifact chain, stage gates, verification loop and guardrails from Anthropic's playbook",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": {
     "name": "Platform team"
   }
