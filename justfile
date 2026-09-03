@@ -7,7 +7,7 @@ plugin_dir := "plugins/ai-native-sdlc"
 
 # Register this repository as a plugin marketplace locally
 sdlc-install:
-    claude plugin marketplace add .
+    claude plugin marketplace add ./
     claude plugin install ai-native-sdlc
 
 # Validate the plugin and marketplace manifests parse
