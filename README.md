@@ -38,9 +38,15 @@ just sdlc-install    # register the marketplace and install locally
 For everyone else, once this repository is pushed:
 
 ```bash
-claude plugin marketplace add <org>/ai-native-sdlc-marketplace
+claude plugin marketplace add actuaristai/my-sdlc-plugin
 claude plugin install ai-native-sdlc
 ```
+
+The `marketplace add` argument is the GitHub `owner/repo` (it clones the
+default branch). `ai-native-sdlc-marketplace` is the marketplace *name*
+from the manifest — use it as the `@marketplace` suffix in
+`claude plugin install ai-native-sdlc@ai-native-sdlc-marketplace` or in
+`claude plugin marketplace remove`.
 
 ## Use it in a repository
 
