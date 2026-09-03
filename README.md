@@ -73,9 +73,16 @@ Shipped hooks:
 
 | Hook | Fires on | Effect |
 |---|---|---|
-| `format-on-edit.sh` | after every edit | runs `just fmt` on the changed file |
-| `protect-tests.sh` | before every edit | blocks test-file edits while `SDLC_FIX_TASK=1` |
-| `production-gate.sh` | before every shell command | blocks production deploys without `RELEASE_APPROVAL` |
+| `format-on-edit.py` | after every edit | runs `just fmt` on the changed file |
+| `protect-tests.py` | before every edit | blocks test-file edits while `SDLC_FIX_TASK=1` |
+| `production-gate.py` | before every shell command | blocks production deploys without `RELEASE_APPROVAL` |
+
+The hooks are Python (stdlib only) so the guardrails run the same on
+Windows, macOS and Linux. `hooks.json` launches each one via a POSIX
+shell line that picks the first available interpreter — `python3`,
+`python`, then `py` — so a Python 3 on `PATH` is the only requirement.
+Claude Code runs hook commands through Git Bash on Windows, so Git for
+Windows must be installed (it already is a Claude Code prerequisite).
 
 Agent PRs target `develop`. The agent may act up to the
 production gate and cannot pass it.

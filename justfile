@@ -15,7 +15,7 @@ sdlc-check:
     Get-Content -Raw .claude-plugin/marketplace.json | ConvertFrom-Json | Out-Null
     Get-Content -Raw {{plugin_dir}}/.claude-plugin/plugin.json | ConvertFrom-Json | Out-Null
     Get-Content -Raw {{plugin_dir}}/hooks/hooks.json | ConvertFrom-Json | Out-Null
-    py -m py_compile {{plugin_dir}}/scripts/sdlc_measure.py
+    py -m py_compile {{plugin_dir}}/scripts/sdlc_measure.py {{plugin_dir}}/hooks/format-on-edit.py {{plugin_dir}}/hooks/protect-tests.py {{plugin_dir}}/hooks/production-gate.py
     @echo "Manifests and scripts are valid."
 
 # Show where every change in a target repo currently sits in the loop
