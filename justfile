@@ -1,14 +1,9 @@
 # AI-native SDLC recipes.
 # Import into an existing justfile with:  import 'sdlc.just'
 
-plugin_dir := "plugins/ai-native-sdlc"
+set windows-shell := ["powershell.exe", "-NoLogo", "-Command"]
 
-# Make the hook and helper scripts executable after a fresh clone
-sdlc-init:
-    chmod +x {{plugin_dir}}/hooks/*.sh
-    chmod +x {{plugin_dir}}/scripts/*.sh
-    chmod +x evals/check.sh
-    @echo "Scripts are executable."
+plugin_dir := "plugins/ai-native-sdlc"
 
 # Register this repository as a plugin marketplace locally
 sdlc-install:
@@ -17,30 +12,27 @@ sdlc-install:
 
 # Validate the plugin and marketplace manifests parse
 sdlc-check:
-    jq empty .claude-plugin/marketplace.json
-    jq empty {{plugin_dir}}/.claude-plugin/plugin.json
-    jq empty {{plugin_dir}}/hooks/hooks.json
-    bash -n {{plugin_dir}}/hooks/format-on-edit.sh
-    bash -n {{plugin_dir}}/hooks/protect-tests.sh
-    bash -n {{plugin_dir}}/hooks/production-gate.sh
-    python -m py_compile {{plugin_dir}}/scripts/sdlc_measure.py
+    Get-Content -Raw .claude-plugin/marketplace.json | ConvertFrom-Json | Out-Null
+    Get-Content -Raw {{plugin_dir}}/.claude-plugin/plugin.json | ConvertFrom-Json | Out-Null
+    Get-Content -Raw {{plugin_dir}}/hooks/hooks.json | ConvertFrom-Json | Out-Null
+    py -m py_compile {{plugin_dir}}/scripts/sdlc_measure.py
     @echo "Manifests and scripts are valid."
 
 # Show where every change in a target repo currently sits in the loop
 sdlc-status:
-    @echo "Intents:"; ls -1 intent/*.md 2>/dev/null | grep -v TEMPLATE || echo "  none"
-    @echo "Specs:";   ls -1 docs/sdlc/*/spec.md 2>/dev/null || echo "  none"
-    @echo "Plans:";   ls -1 docs/sdlc/*/plan.md 2>/dev/null || echo "  none"
+    @echo "Intents:"; $i = Get-ChildItem intent/*.md -ErrorAction SilentlyContinue | Where-Object Name -notmatch 'TEMPLATE'; if ($i) { $i.Name -replace '^', '  ' } else { "  none" }
+    @echo "Specs:";   $s = Get-ChildItem docs/sdlc/*/spec.md -ErrorAction SilentlyContinue; if ($s) { $s.FullName } else { "  none" }
+    @echo "Plans:";   $p = Get-ChildItem docs/sdlc/*/plan.md -ErrorAction SilentlyContinue; if ($p) { $p.FullName } else { "  none" }
 
 # Report the playbook's leading and lagging indicators from git history
 sdlc-measure since="90.days":
-    python {{plugin_dir}}/scripts/sdlc_measure.py --since {{since}}
+    py {{plugin_dir}}/scripts/sdlc_measure.py --since {{since}}
 
 # Scaffold the artifact directory for a new change
 sdlc-new slug:
-    mkdir -p docs/sdlc/{{slug}}
-    cp docs/sdlc/spec-template.md docs/sdlc/{{slug}}/spec.md
-    cp docs/sdlc/plan-template.md docs/sdlc/{{slug}}/plan.md
+    New-Item -ItemType Directory -Force -Path docs/sdlc/{{slug}} | Out-Null
+    Copy-Item docs/sdlc/spec-template.md docs/sdlc/{{slug}}/spec.md
+    Copy-Item docs/sdlc/plan-template.md docs/sdlc/{{slug}}/plan.md
     @echo "Scaffolded docs/sdlc/{{slug}}/"
 
 # The verification gate the agent must pass before claiming done

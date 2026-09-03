@@ -30,8 +30,7 @@ intent.md  →  spec.md  →  plan.md  →  diff + tests  →  PR + findings  �
 
 ## Install
 
-```bash
-just sdlc-init       # make the scripts executable
+```powershell
 just sdlc-check      # validate manifests and scripts
 just sdlc-install    # register the marketplace and install locally
 ```
